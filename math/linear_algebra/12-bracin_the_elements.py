@@ -8,4 +8,4 @@ def np_elementwise(mat1, mat2):
     """
     Adds, subtracts, multiplies, and divides two matrices element-wise
     """
-    return tuple(mat1 + mat2, mat1 - mat2, mat1 * mat2, mat1 / mat2)
+    return (mat1 + mat2, mat1 - mat2, mat1 * mat2, mat1 / mat2)

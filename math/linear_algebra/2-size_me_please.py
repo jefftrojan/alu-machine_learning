@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Function that calculates
- the shape of a matrix 
- using recursion 
+ the shape of a matrix
+ using recursion
  """
 
 

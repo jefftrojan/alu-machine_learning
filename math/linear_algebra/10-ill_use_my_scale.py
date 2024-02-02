@@ -3,14 +3,11 @@
 Calculate the shape of an Ndarray
 """
 
-
+import numpy as np
 def np_shape(matrix):
     """
     Calculate the shape of an Ndarray
     """
-    shape = []
-    while type(matrix) == list:
-        shape.append(len(matrix))
-        matrix = matrix[0]
-    return shape + [len(matrix)]
+    matrix = np.array(matrix)
+    return matrix.shape()
 

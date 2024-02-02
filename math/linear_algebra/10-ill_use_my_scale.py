@@ -8,4 +8,4 @@ def np_shape(matrix):
     """
     Calculate the shape of an Ndarray
     """
-    return tuple(len(matrix.shape))
+    return tuple(matrix.shape)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Creates the class MultiNormal
+Creates the MultiNormal class
 """
 import numpy as np
 

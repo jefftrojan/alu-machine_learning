@@ -5,7 +5,7 @@ import numpy as np
 
 
 def correlation(C):
-    """Function that calculates a correlation matrix"""
+    """Function calculates a correlation matrix"""
     if type(C) is not np.ndarray:
         raise TypeError("C must be a numpy.ndarray")
     if len(C.shape) != 2:

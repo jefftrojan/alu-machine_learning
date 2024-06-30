@@ -1,25 +1,31 @@
 #!/usr/bin/env python3
-"""
-Can I join
-"""
+""" Return list of ships"""
 
 
 import requests
 
 
 def availableShips(passengerCount):
+    """ Return list of ships
+
+    Args:
+        passengerCount (int): number of ships
     """
-    Returns the number of ships that can accommodate the given number of passengers.
-    """
+
     res = requests.get('https://swapi-api.alx-tools.com/api/starships')
-    ships = res.json().get('results')
-    count = 0
-    for ship in ships:
+
+    output = []
+    while res.status_code == 200:
+        res = res.json()
+        for ship in res['results']:
+            passengers = ship['passengers'].replace(',', '')
+            try:
+                if int(passengers) >= passengerCount:
+                    output.append(ship['name'])
+            except ValueError:
+                pass
         try:
-            if int(ship.get('passengers')) >= passengerCount:
-                count += 1
-        except ValueError:
-            pass
-    return count
-
-
+            res = requests.get(res['next'])
+        except Exception:
+            break
+    return output

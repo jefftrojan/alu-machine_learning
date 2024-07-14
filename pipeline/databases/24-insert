@@ -1,0 +1,6 @@
+// insert document into collection
+db.school.insert(
+    {
+        name: "Holberton school"
+    }
+)

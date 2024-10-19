@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""
-Defines function that initializes variables for a Gaussian Mixture Model
-"""
 
+"""
+This module contains a function that
+initializes variables for a Gaussian Mixture Model
+"""
 
 import numpy as np
 kmeans = __import__('1-kmeans').kmeans
@@ -10,28 +11,27 @@ kmeans = __import__('1-kmeans').kmeans
 
 def initialize(X, k):
     """
-    Initializes variables for a Gaussian Mixture Model
+    initializes variables for a Gaussian Mixture Model
 
-    parameters:
-        X [numpy.ndarray of shape (n, d)]:
-            contains the dataset used for K-means clustering
-            n: the number of data points
-            d: the number of dimensions for each data point
-        k [positive int]:
-            containing the number of clusters
+    X: numpy.ndarray (n, d) containing the dataset
+        - n no. of data points
+        - d no. of dimensions for each data point
+    k: positive integer - the number of clusters
 
-    not allowed to use any loops
-
-    returns:
-        pi, m, S:
-            pi [numpy.ndarray of shape (k,)]:
-                containing the priors for each cluster, initialized evenly
-            m [numpy.ndarray of shape (k, d)]:
-                containing the centroid means for each cluster,
-                    initialized with K-means
-            S [numpy.ndarray of shape (k, d, d)]:
-                containing the covariance matrices for each cluster,
-                    initialized as identity matrices
-        or None, None, None on failure
+    return:
+        - pi: numpy.ndarray (k,) containing priors for each cluster
+        initialized to be equal
+        - m: numpy.ndarray (k, d) containing centroid means for each cluster,
+        initialized with K-means
+        - S: numpy.ndarray (k, d, d) covariance matrices for each cluster,
+        initialized as identity matrices
     """
-    return None, None, None
+    n, d = X.shape
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        return None, None, None
+    if not isinstance(k, int) or k <= 0:
+        return None, None, None
+    pi = np.full((k,), 1 / k)
+    m, _ = kmeans(X, k)
+    S = np.full((k, d, d), np.identity(d))
+    return pi, m, S

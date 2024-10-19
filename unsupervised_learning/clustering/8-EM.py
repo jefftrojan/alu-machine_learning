@@ -66,4 +66,3 @@ def expectation_maximization(X,
         print("Log Likelihood after {} iterations: {}".format(
             i, loglikelihood_new.round(5)))
     return pi, m, S, g, loglikelihood_new
-                               

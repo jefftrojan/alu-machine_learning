@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Optimum K method aka inversed elbow"""
+
+"""
+This module contains a function that
+tests for the optimum number of clusters by variance
+"""
 
 import numpy as np
 kmeans = __import__('1-kmeans').kmeans
@@ -8,45 +12,42 @@ variance = __import__('2-variance').variance
 
 def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     """
-    Optimun K method with variance
-    Args:
-        X: numpy.ndarray of shape (n, d) containing the data set
-        kmin: positive integer containing the minimum number of
-              clusters to check for (inclusive)
-        kmax: positive integer containing the maximum number of
-              clusters to check for (inclusive)
-        iterations: positive integer containing the maximum number
-                    of iterations for K-means
-    Returns: results, d_vars, or None, None on failure
-             results: list containing the outputs of K-means for
-                     each cluster size
-             d_vars: list containing the difference in variance from
-                     the smallest cluster size for each cluster size
-    """
-    try:
-        if not isinstance(X, np.ndarray) or len(X.shape) != 2:
-            return None, None
-        if not isinstance(iterations, int) or iterations < 1:
-            return None, None
-        if kmax is not None and (type(kmax) is not int or kmax < 1):
-            return None, None
-        if kmax is not None and kmin >= kmax:
-            return None, None
-        if kmax is None:
-            kmax = X.shape[0]
-        if not isinstance(kmin, int) or kmin < 1 or kmin >= X.shape[0]:
-            return None, None
+    calculates intra-cluster variance for a dataset
 
-        results = []
-        d_vars = []
-        for k in range(kmin, kmax + 1):
-            cluster, clss = kmeans(X, k, iterations)
-            results.append((cluster, clss))
-            variance_d = variance(X, cluster)
-            if k == kmin:
-                variance_k = variance_d
-            d_vars.append(variance_k - variance_d)
-        return results, d_vars
-    except Exception:
+    X: numpy.ndarray (n, d) containing the dataset
+        - n no. of data points
+        - d no. of dimensions for each data point
+    kmin: positive integer - the minimum no. of clusters
+    kmax: positive integer - the maximum no. of clusters
+    iterations: +ve(int) - max no. of iterations perfomed
+
+    return:
+        - results: list containing the results of the
+        K-means for each cluster size
+        - d_vars: list containing the difference in variance
+        from the smallest cluster size for each cluster size
+    """
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None
-        
+    if not isinstance(kmin, int) or kmin <= 0:
+        return None, None
+    if not isinstance(kmax, int) or kmax <= 0:
+        return None, None
+    if kmin >= kmax:
+        return None, None
+    if not isinstance(iterations, int) or iterations <= 0:
+        return None, None
+    if kmax is None:
+        kmax = X.shape[0]
+
+    results = []
+    d_vars = []
+    var = float('inf')
+    for k in range(kmin, kmax + 1):
+        C, clss = kmeans(X, k, iterations)
+        results.append((C, clss))
+        new_var = variance(X, C)
+        if k == kmin:
+            var = new_var
+        d_vars.append(var - new_var)
+    return results, d_vars

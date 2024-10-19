@@ -31,3 +31,4 @@ def variance(X, C):
     variance = np.sum(min_distances ** 2)
 
     return variance
+    

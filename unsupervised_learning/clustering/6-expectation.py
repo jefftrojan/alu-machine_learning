@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""
-Defines function that calculates the expectation step in the EM algorithm
-for a Gaussian Mixture Model
-"""
 
+"""
+This module contains a function that calculates
+expectation step in the EM algorithm for a GMM
+"""
 
 import numpy as np
 pdf = __import__('5-pdf').pdf
@@ -11,29 +11,33 @@ pdf = __import__('5-pdf').pdf
 
 def expectation(X, pi, m, S):
     """
-    Calculates the expectation step in the EM algorithm for a GMM
+    initializes variables for a Gaussian Mixture Model
 
-    parameters:
-        X [numpy.ndarray of shape (n, d)]:
-            contains the dataset
-            n: the number of data points
-            d: the number of dimensions for each data point
-        pi [numpy.ndarray of shape (k,)]:
-            contains the priors for each cluster
-        m [numpy.ndarray of shape (k, d)]:
-            contains the centroid means for each clustern
-        S [numpy.ndarray of shape (k, d, d)]:
-            contains the covariance matrices for each cluster
+    X: numpy.ndarray (n, d) containing the dataset
+        - n no. of data points
+        - d no. of dimensions for each data point
+    pi: numpy.ndarray (k,) containing the priors for each cluster
+    m: numpy.ndarray (k, d) containing centroid means for each cluster
+    S: numpy.ndarray (k, d, d) covariance matrices for each cluster
 
-    should only use one loop
-
-    returns:
-        g, l:
-            g [numpy.ndarray of shape (k, n)]:
-                containing the posterior probabilities for each data point
-                    in the cluster
-            l [float]:
-                total log likelihood
-        or None, None on failure
+    return:
+        - g: numpy.ndarray (k, n) containing the posterior
+            probabilities for each data point in each cluster
+        -l: log likelihood of the model
     """
-    return None, None
+    if len(X.shape) != 2 or len(S.shape) != 3\
+            or len(pi.shape) != 1 or len(m.shape) != 2\
+            or m.shape[1] != X.shape[1]\
+            or S.shape[2] != S.shape[1]\
+            or S.shape[0] != pi.shape[0]\
+            or S.shape[0] != m.shape[0]\
+            or np.min(pi) < 0:
+        return None, None
+    n, d = X.shape
+    k = pi.shape[0]
+    g = np.zeros((k, n))
+    for i in range(k):
+        g[i] = pi[i] * pdf(X, m[i], S[i])
+    g = g / np.sum(g, axis=0)
+    l = np.sum(np.log(np.sum(g, axis=0)))
+    return g, l

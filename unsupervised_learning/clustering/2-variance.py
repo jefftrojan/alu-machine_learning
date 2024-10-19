@@ -1,34 +1,27 @@
 #!/usr/bin/env python3
-"""Variance"""
+"""Calculating the total intra-cluster variance for a data set"""
 
 import numpy as np
 
 
 def variance(X, C):
-    """
-    Calculate the total intra-cluste variance for a data set
-    Args:
-        X: numpy.ndarray of shape (n, d) containing the data set
-        C: numpy.ndarray of shape (k, d) containing the centroid means
-           for each cluster
-    Returns: Var or None on failure
-    """
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+    """Function that calculates the total intra-cluster
+        variance for a data set:
+
+    X is a numpy.ndarray of shape (n, d) containing the data set
+    C is a numpy.ndarray of shape (k, d)
+        containing the centroid means for each cluster
+    You are not allowed to use any loops
+    Returns: var, or None on failure
+    var is the total variance"""
+
+    if not isinstance(X, np.ndarray) or not isinstance(C, np.ndarray) or \
+            len(X.shape) != 2 or len(C.shape) != 2 or \
+            X.shape[1] != C.shape[1] or C.shape[1] <= 0 or X.size == 0 or \
+            C.size == 0:
         return None
-    if not isinstance(C, np.ndarray) or len(C.shape) != 2:
-        return None
-    if X.shape[1] != C.shape[1]:
-        return None
 
-    n, d = X.shape
-
-    # distances also know as euclidean distance
-    centroids_extended = C[:, np.newaxis]
-    distances = np.sqrt(((X - centroids_extended) ** 2).sum(axis=2))
-    min_distances = np.min(distances, axis=0)
-
-    # W=∑k=1K∑xi∈Ck∥xi−x¯k∥2
-    variance = np.sum(min_distances ** 2)
-
-    return variance
-    
+    dist_diff = np.linalg.norm(X - C[:, np.newaxis], axis=2).T
+    minimum_dist = np.min(dist_diff, axis=1)
+    var = np.sum(np.square(minimum_dist))
+    return var

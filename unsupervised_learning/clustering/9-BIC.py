@@ -79,4 +79,3 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     best_res = best_res[best_val]
 
     return k_best, best_res, logl_val, bic_val
-    

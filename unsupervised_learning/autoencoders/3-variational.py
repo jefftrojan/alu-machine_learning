@@ -3,7 +3,6 @@
 """This module creates a variational autoencoder."""
 
 # import tensorflow.keras as keras
-import tensorflow as tf
 import tensorflow.keras as keras
 
 def sampling(args):
